@@ -1,6 +1,10 @@
 # CDN PostMessage
 
-Este repositório contém o código necessário para comunicação entre iframes utilizando `postMessage`. Para utilizar o código, basta adicionar o seguinte script no seu HTML:
+Este repositório contém uma biblioteca JavaScript para comunicação entre a página principal e um iframe utilizando o método `postMessage`. A biblioteca foi projetada para ser carregada via CDN, permitindo a integração fácil com qualquer site que utilize iframes e precise enviar/receber dados de forma segura e eficiente.
+
+## Como usar
+
+Para utilizar a biblioteca, adicione o seguinte código no seu HTML:
 
 ```html
 <script
