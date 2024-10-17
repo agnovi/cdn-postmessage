@@ -1,4 +1,4 @@
-// Version: 1.3
+// Version: 1.4
 function initTraining({ totalClicks, totalVideos }) {
     function sendMessageToWrapper(message) {
         if (window.parent) {
@@ -63,28 +63,42 @@ function initTraining({ totalClicks, totalVideos }) {
             firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
             window.onYouTubeIframeAPIReady = function () {
-                createYouTubePlayer(iframeElement);
+                createYouTubePlayers();
             };
         } else {
-            createYouTubePlayer(iframeElement);
+            createYouTubePlayers();
         }
     }
 
-    // Criar o player do YouTube e monitorar mudanças de estado
-    function createYouTubePlayer(iframeElement) {
-        const player = new YT.Player(iframeElement, {
-            events: {
-                onStateChange: onPlayerStateChange,
-            },
+    // Criar todos os players do YouTube e monitorar mudanças de estado
+    function createYouTubePlayers() {
+        let iframeElements = document.querySelectorAll('iframe[src*="youtube.com"]');
+        iframeElements.forEach(function (iframeElement) {
+            const player = new YT.Player(iframeElement.id, {
+                height: '315',
+                width: '560',
+                videoId: iframeElement.dataset.videoId,
+                events: {
+                    onReady: onPlayerReady,
+                    onStateChange: onPlayerStateChange,
+                },
+            });
         });
     }
 
-    // Verificar o estado do player (detecta 'ended')
+    // Função chamada quando o player está pronto
+    function onPlayerReady(event) {
+        console.log("O vídeo está pronto para ser reproduzido.");
+    }
+
+    // Função chamada quando o estado do player muda
     function onPlayerStateChange(event) {
+        // Verifica se o estado é 0 (final do vídeo)
         if (event.data === YT.PlayerState.ENDED) {
             sendMessageToWrapper({
                 type: 'video',
                 state: 'ended',
+                videoId: event.target.getIframe().id // Adiciona o ID do iframe ao enviar a mensagem
             });
         }
     }
