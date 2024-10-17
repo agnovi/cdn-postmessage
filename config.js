@@ -1,4 +1,4 @@
-// Version: 1.1
+// Version: 1.2
 function initTraining({ totalClicks, totalVideos }) {
     function sendMessageToWrapper(message) {
       if (window.parent) {
